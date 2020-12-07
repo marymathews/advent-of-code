@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 class AocDayOne {
@@ -12,7 +11,7 @@ class AocDayOne {
 
     HashSet<Integer> inputPuzzleData() {
         Scanner in = new Scanner(System.in);
-        HashSet<Integer> puzzleInput = new HashSet();
+        HashSet<Integer> puzzleInput = new HashSet<Integer>();
         while(true) {
             int num;
             try {
@@ -39,7 +38,7 @@ class AocDayOne {
     }
 
     int resultThreeSum(HashSet<Integer> data, int sum) {
-        HashSet<Integer> dataCopy = new HashSet();
+        HashSet<Integer> dataCopy = new HashSet<Integer>();
         dataCopy.addAll(data);
         int product = 0;
         for(Integer number : data) {
