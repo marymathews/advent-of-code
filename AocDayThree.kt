@@ -16,6 +16,7 @@ fun inputPuzzle() : ArrayList<String> {
     while(reader.hasNextLine()) {
         input.add(reader.nextLine())
     }
+    reader.close()
     return input
 }
 
