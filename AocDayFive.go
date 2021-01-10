@@ -4,19 +4,19 @@ import (
     "bufio"
     "os"
     "fmt"
+    "sort"
 )
 
 func main() {
     var puzzleInput []string = getPuzzleInput()
+    var seatNumbers []int
     
-    maxSeatNumber := 0
     for i := 0; i < len(puzzleInput); i++ {
-        var seatNumber = getSeatNumber(puzzleInput[i])
-        if seatNumber > maxSeatNumber {
-            maxSeatNumber = seatNumber
-        }
+        seatNumbers = append(seatNumbers, getSeatNumber(puzzleInput[i]))
     }
-    fmt.Println(maxSeatNumber);
+    sort.Ints(seatNumbers)
+    fmt.Println(seatNumbers[len(seatNumbers) - 1])
+    fmt.Println(getMissingSeat(seatNumbers))
 }
 
 func getPuzzleInput() []string {
@@ -40,18 +40,27 @@ func getSeatNumber(seatData string) int {
     for i := 0; i < len(seatData); i++ {
         if i <= 6 {
             if seatData[i] == 'F' {
-                maxRowNumber = (minRowNumber + maxRowNumber) / 2;
+                maxRowNumber = (minRowNumber + maxRowNumber) / 2
             } else {
-                minRowNumber = (minRowNumber + maxRowNumber) / 2 + 1;
+                minRowNumber = (minRowNumber + maxRowNumber) / 2 + 1
             }
         } else {
             if seatData[i] == 'L' {
-                maxColNumber = (minColNumber + maxColNumber) / 2;
+                maxColNumber = (minColNumber + maxColNumber) / 2
             } else {
-                minColNumber = (minColNumber + maxColNumber) / 2 + 1;
+                minColNumber = (minColNumber + maxColNumber) / 2 + 1
             }
         }
     }
-    var seatNumber int = minRowNumber * 8 + minColNumber;
+    var seatNumber int = minRowNumber * 8 + minColNumber
     return seatNumber
+}
+
+func getMissingSeat(seatNumbers []int) int {
+    for i := 0; i < len(seatNumbers) - 1; i++ {
+        if seatNumbers[i + 1] - seatNumbers[i] != 1 {
+            return seatNumbers[i] + 1
+        }
+    }
+    return -1
 }
