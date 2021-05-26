@@ -1,15 +1,21 @@
 fun main() {
     val buses = ArrayList<Long>()
-    val timestamp = getPuzzleInput(buses) 
+    val minutesDiff = ArrayList<Int>()
+    val timestamp = getPuzzleInput(buses, minutesDiff)
     println(getWaitingTime(buses, timestamp))
+    println(getEarliestTimestamp(buses, minutesDiff, buses[0]))
 }
 
-fun getPuzzleInput(buses : ArrayList<Long>) : Long {
+fun getPuzzleInput(buses : ArrayList<Long>, minutesDiff : ArrayList<Int>) : Long {
+    var minuteCount = 0;
     val timestamp = readLine() ?: "0"
     val input = (readLine() ?: "0").split(",")
     for (bus in input) {
-        if(!bus.equals("x"))
+        if(!bus.equals("x")) {
             buses.add(bus.toLong())
+            minutesDiff.add(minuteCount)
+        }
+        minuteCount++;
     }
     return timestamp.toLong()
 }
@@ -30,4 +36,21 @@ fun getWaitingTime(buses : ArrayList<Long>, timestamp : Long) : Long {
     }
 
     return waitingTime * closest
+}
+
+fun getEarliestTimestamp(buses : ArrayList<Long>, minutesDiff : ArrayList<Int>, start : Long) : Long {
+    var index : Int = 0;
+    var time = start
+    var increment : Long = 1L;
+
+    while(index < buses.size) {
+        if((time + minutesDiff[index]) % buses[index] != 0L) {
+            time += increment;
+        } else {
+            increment *= buses[index];
+            index++;
+        }
+    }
+
+    return time
 }
