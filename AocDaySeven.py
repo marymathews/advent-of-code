@@ -1,7 +1,6 @@
 bags = dict()
 original_target = "shinygold"
 containers = set()
-bag_count = 0 
 
 def readInput() -> list:
     with open('input_seven.txt') as file:
