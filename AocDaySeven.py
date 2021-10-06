@@ -1,6 +1,7 @@
 bags = dict()
 original_target = "shinygold"
 containers = set()
+bag_count = 0 
 
 def readInput() -> list:
     with open('input_seven.txt') as file:
@@ -15,10 +16,13 @@ def createMap(line : str):
     if words[4] == "no":
         return
     
-    bags[key] = set()
+    bags[key] = dict()
     idx = 5
     while idx < len(words):
-        bags[key].add(words[idx] + words[idx + 1])
+        color = words[idx] + words[idx + 1]
+        if color not in bags[key]:
+            bags[key][color] = 0
+        bags[key][color] += int(words[idx - 1])
         idx += 4
 
 def findTarget(bags, target, containers):
@@ -27,6 +31,16 @@ def findTarget(bags, target, containers):
             containers.add(key)
             findTarget(bags, key, containers)
 
+def countBags(bags, target):
+    if target not in bags:
+        return 0
+    
+    bag_count = 0
+    for bag, count in bags[target].items():
+        bag_count += count + count * countBags(bags, bag)
+        
+    return bag_count
+       
 if __name__ == "__main__":
     data = readInput()
     for line in data:
@@ -34,3 +48,4 @@ if __name__ == "__main__":
 
     findTarget(bags, original_target, containers)
     print(len(containers))
+    print(countBags(bags, original_target))
