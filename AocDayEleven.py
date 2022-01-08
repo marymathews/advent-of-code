@@ -41,7 +41,30 @@ def get_adjacent_occupied_count(r, c, row, old_matrix):
         
     return count
 
-def update_matrix():
+def get_nearest_occupied_count(r, c, row, old_matrix):
+    count = 0
+
+    for offset in offsets:
+        pos_r = r 
+        pos_c = c
+
+        while True:
+            pos_r += offset[0]
+            pos_c += offset[1]
+
+            if pos_r >= len(matrix) or pos_r < 0 or pos_c >= len(row) or pos_c < 0:
+                break
+    
+            if old_matrix[pos_r][pos_c] == '#':
+                count += 1
+                break 
+            
+            if old_matrix[pos_r][pos_c] != ".":
+                break
+
+    return count
+
+def update_matrix(occ_tolerance, adj_only=True):
     old_matrix = matrix.copy()
     new_matrix = matrix.copy()  
 
@@ -52,14 +75,17 @@ def update_matrix():
             for c, col in enumerate(row):
                 
                 update_char = ''
-                adj_occ_count = get_adjacent_occupied_count(r, c, row, old_matrix)
+                if adj_only:
+                    adj_occ_count = get_adjacent_occupied_count(r, c, row, old_matrix)
+                else:
+                    adj_occ_count = get_nearest_occupied_count(r, c, row, old_matrix)
 
                 if col == 'L':
                     if adj_occ_count == 0:
                         update_char = '#'
                 
                 elif col == '#':
-                    if adj_occ_count >= 4:
+                    if adj_occ_count >= occ_tolerance:
                         update_char = 'L'
 
                 if update_char != '':
@@ -73,5 +99,9 @@ def update_matrix():
     return new_matrix
 
 read_input()
-new_matrix = update_matrix()
+#Part 1
+new_matrix = update_matrix(4)
+print(count_occupied_seats(new_matrix))
+#Part 2
+new_matrix = update_matrix(5, False)
 print(count_occupied_seats(new_matrix))
